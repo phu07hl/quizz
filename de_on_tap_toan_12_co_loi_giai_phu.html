@@ -1,0 +1,351 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Ôn Tập Toán 12 - Có Lời Giải - Phú</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .section-title {
+            background: #3498db;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-top: 30px;
+        }
+        .question {
+            margin-bottom: 25px;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            background: #fafafa;
+        }
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .option {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .option:hover {
+            background: #eef2f7;
+        }
+        .tf-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px dashed #eee;
+        }
+        .short-answer input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button#submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: #27ae60;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin-top: 40px;
+            transition: background 0.3s;
+        }
+        button#submit-btn:hover {
+            background: #219150;
+        }
+        #result {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .correct-bg { background-color: #d4edda !important; border-color: #c3e6cb !important; }
+        .wrong-bg { background-color: #f8d7da !important; border-color: #f5c6cb !important; }
+        .explanation {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            font-size: 0.95em;
+            border-radius: 4px;
+        }
+        .explanation-title {
+            font-weight: bold;
+            color: #856404;
+            margin-bottom: 5px;
+        }
+        @media (max-width: 600px) {
+            .options { grid-template-columns: 1fr; }
+            .tf-row { flex-direction: column; align-items: flex-start; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>📝 Đề Ôn Tập Toán 12: Có Lời Giải Chi Tiết</h1>
+    <p style="text-align: center; color: #666;">Chú ý làm nháp cẩn thận từng bước nhé Phú, tránh mất điểm vì tính ẩu!</p>
+
+    <div id="quiz-content">
+        <!-- Phần I -->
+        <h2 class="section-title">Phần I. Trắc nghiệm (20 câu)</h2>
+        <div id="part1"></div>
+
+        <!-- Phần II -->
+        <h2 class="section-title">Phần II. Đúng/Sai (4 câu)</h2>
+        <div id="part2"></div>
+
+        <!-- Phần III -->
+        <h2 class="section-title">Phần III. Trả lời ngắn (4 câu)</h2>
+        <div id="part3"></div>
+    </div>
+
+    <button id="submit-btn" onclick="checkAnswers()">Nộp bài & Xem Lời Giải</button>
+
+    <div id="result"></div>
+</div>
+
+<script>
+const mcqs = [
+    { q: "Cho số thực dương \\(a\\). Biểu thức \\(P = a^{\\frac{1}{3}} \\cdot \\sqrt{a}\\) được viết dưới dạng lũy thừa với số mũ hữu tỉ là:", options: ["\\(a^{\\frac{1}{6}}\\)", "\\(a^{\\frac{5}{6}}\\)", "\\(a^{\\frac{2}{3}}\\)", "\\(a^{\\frac{1}{2}}\\)"], ans: 1, exp: "\\(P = a^{\\frac{1}{3}} \\cdot a^{\\frac{1}{2}} = a^{\\frac{1}{3} + \\frac{1}{2}} = a^{\\frac{5}{6}}\\)" },
+    { q: "Tập xác định của hàm số \\(y = (x-2)^{-3}\\) là:", options: ["\\(\\mathbb{R}\\)", "\\((2; +\\infty)\\)", "\\(\\mathbb{R} \\setminus \\{2\\}\\)", "\\([2; +\\infty)\\)"], ans: 2, exp: "Hàm số lũy thừa với số mũ nguyên âm xác định khi cơ số khác 0 \\(\\Rightarrow x - 2 \\neq 0 \\Leftrightarrow x \\neq 2\\)." },
+    { q: "Cho \\(a > 0, a \\neq 1\\). Giá trị của biểu thức \\(\\log_a(a^4)\\) bằng:", options: ["4", "\\(\\frac{1}{4}\\)", "\\(a^4\\)", "1"], ans: 0, exp: "\\(\\log_a(a^4) = 4\\log_a(a) = 4 \\cdot 1 = 4\\)." },
+    { q: "Với \\(a\\) là số thực dương tùy ý, \\(\\log_2(8a)\\) bằng:", options: ["\\(3 + \\log_2 a\\)", "\\(4 \\log_2 a\\)", "\\(3 \\log_2 a\\)", "\\(8 + \\log_2 a\\)"], ans: 0, exp: "\\(\\log_2(8a) = \\log_2(8) + \\log_2(a) = 3 + \\log_2 a\\)." },
+    { q: "Đạo hàm của hàm số \\(y = e^{2x}\\) là:", options: ["\\(y' = e^{2x}\\)", "\\(y' = 2xe^{2x-1}\\)", "\\(y' = 2e^{2x}\\)", "\\(y' = \\frac{e^{2x}}{2}\\)"], ans: 2, exp: "Sử dụng công thức \\((e^u)' = u' \\cdot e^u \\Rightarrow (e^{2x})' = (2x)' \\cdot e^{2x} = 2e^{2x}\\)." },
+    { q: "Tập xác định của hàm số \\(y = \\ln(3-x)\\) là:", options: ["\\(\\mathbb{R} \\setminus \\{3\\}\\)", "\\((-\\infty; 3]\\)", "\\((3; +\\infty)\\)", "\\((-\\infty; 3)\\)"], ans: 3, exp: "Hàm số lôgarit xác định khi biểu thức trong lôgarit dương \\(\\Rightarrow 3 - x > 0 \\Leftrightarrow x < 3\\)." },
+    { q: "Nghiệm của phương trình \\(3^{2x-1} = 27\\) là:", options: ["\\(x = 1\\)", "\\(x = 2\\)", "\\(x = \\frac{5}{2}\\)", "\\(x = 4\\)"], ans: 1, exp: "\\(3^{2x-1} = 3^3 \\Leftrightarrow 2x - 1 = 3 \\Leftrightarrow 2x = 4 \\Leftrightarrow x = 2\\)." },
+    { q: "Nghiệm của phương trình \\(\\log_2(x+1) = 3\\) là:", options: ["\\(x = 7\\)", "\\(x = 8\\)", "\\(x = 5\\)", "\\(x = 2\\)"], ans: 0, exp: "Điều kiện: \\(x > -1\\). Phương trình \\(\\Leftrightarrow x + 1 = 2^3 = 8 \\Leftrightarrow x = 7\\)." },
+    { q: "Tập nghiệm của bất phương trình \\(2^{x^2-x} \\le 4\\) là:", options: ["\\([-1; 2]\\)", "\\((-\\infty; -1] \\cup [2; +\\infty)\\)", "\\([1; 2]\\)", "\\([-2; 1]\\)"], ans: 0, exp: "\\(2^{x^2-x} \\le 2^2 \\Leftrightarrow x^2 - x \\le 2 \\Leftrightarrow x^2 - x - 2 \\le 0 \\Leftrightarrow -1 \\le x \\le 2\\)." },
+    { q: "Tập nghiệm của bất phương trình \\(\\log_{\\frac{1}{2}}(x-1) > 0\\) là:", options: ["\\((1; 2)\\)", "\\((2; +\\infty)\\)", "\\((1; 2]\\)", "\\((-\\infty; 2)\\)"], ans: 0, exp: "Điều kiện: \\(x > 1\\). Cơ số \\(\frac{1}{2} < 1\\) nên bpt nghịch biến: \\(x - 1 < (\\frac{1}{2})^0 = 1 \\Leftrightarrow x < 2\\). Kết hợp ĐK ta được \\(1 < x < 2\\)." },
+    { q: "Trong không gian, cho hai đường thẳng phân biệt \\(a, b\\) và mặt phẳng \\((P)\\). Mệnh đề nào sau đây đúng?", options: ["Nếu \\(a \\perp (P)\\) và \\(b \\perp (P)\\) thì \\(a \\parallel b\\).", "Nếu \\(a \\parallel (P)\\) và \\(b \\perp a\\) thì \\(b \\perp (P)\\).", "Nếu \\(a \\parallel b\\) và \\(a \\parallel (P)\\) thì \\(b \\parallel (P)\\).", "Nếu \\(a \\perp b\\) và \\(a \\perp (P)\\) thì \\(b \\parallel (P)\\)."], ans: 0, exp: "Theo tính chất về quan hệ vuông góc: Hai đường thẳng phân biệt cùng vuông góc với một mặt phẳng thì song song với nhau." },
+    { q: "Cho hình chóp \\(S.ABC\\) có \\(SA \\perp (ABC)\\). Hình chiếu vuông góc của \\(SB\\) lên mặt phẳng \\((ABC)\\) là đường thẳng:", options: ["\\(SA\\)", "\\(AB\\)", "\\(BC\\)", "\\(SC\\)"], ans: 1, exp: "Vì \\(SA \\perp (ABC)\\) nên \\(A\\) là hình chiếu của \\(S\\) lên \\((ABC)\\). \\(B \\in (ABC)\\) nên hình chiếu của \\(B\\) là chính nó. Vậy hình chiếu của \\(SB\\) là \\(AB\\)." },
+    { q: "Cho hình lăng trụ đứng \\(ABC.A'B'C'\\). Góc giữa cạnh bên \\(AA'\\) và mặt đáy \\((ABC)\\) bằng:", options: ["\\(0^\\circ\\)", "\\(45^\\circ\\)", "\\(60^\\circ\\)", "\\(90^\\circ\\)"], ans: 3, exp: "Đặc điểm của lăng trụ đứng là cạnh bên vuông góc với mặt đáy, nên góc bằng \\(90^\\circ\\)." },
+    { q: "Cho hình chóp \\(S.ABCD\\) có đáy là hình vuông, \\(SA \\perp (ABCD)\\). Đường thẳng \\(BD\\) vuông góc với mặt phẳng nào sau đây?", options: ["\\((SAB)\\)", "\\((SAD)\\)", "\\((SAC)\\)", "\\((SBC)\\)"], ans: 2, exp: "Ta có \\(BD \\perp AC\\) (hai đường chéo hình vuông) và \\(BD \\perp SA\\) (do \\(SA \\perp (ABCD)\\)). Từ đó \\(BD \\perp (SAC)\\)." },
+    { q: "Điều kiện cần và đủ để hai mặt phẳng vuông góc với nhau là:", options: ["Mặt phẳng này chứa một đường thẳng vuông góc với mặt phẳng kia.", "Hai mặt phẳng đó cùng vuông góc với một mặt phẳng thứ ba.", "Hai mặt phẳng đó cắt nhau và tạo thành một góc nhọn.", "Có một đường thẳng nằm trong mặt phẳng này và song song với mặt phẳng kia."], ans: 0, exp: "Đây là định lý cơ bản về điều kiện để hai mặt phẳng vuông góc." },
+    { q: "Cho hình lập phương \\(ABCD.A'B'C'D'\\) có cạnh bằng \\(a\\). Khoảng cách từ điểm \\(A\\) đến mặt phẳng \\((BCC'B')\\) bằng:", options: ["\\(a\\sqrt{2}\\)", "\\(\\frac{a\\sqrt{2}}{2}\\)", "\\(a\\sqrt{3}\\)", "\\(a\\)"], ans: 3, exp: "Vì khối lập phương có \\(AB \\perp (BCC'B')\\) nên \\(d(A, (BCC'B')) = AB = a\\)." },
+    { q: "Cho hình chóp \\(S.ABC\\) có \\(SA \\perp (ABC)\\), đáy \\(ABC\\) là tam giác vuông tại \\(B\\). Khoảng cách từ \\(S\\) đến đường thẳng \\(BC\\) là độ dài đoạn thẳng:", options: ["\\(SB\\)", "\\(SC\\)", "\\(AB\\)", "\\(SA\\)"], ans: 0, exp: "Ta có \\(BC \\perp AB\\) và \\(BC \\perp SA \\Rightarrow BC \\perp (SAB) \\Rightarrow BC \\perp SB\\). Vậy khoảng cách từ \\(S\\) đến \\(BC\\) chính là đoạn \\(SB\\)." },
+    { q: "Thể tích của khối lăng trụ có diện tích đáy \\(B\\) và chiều cao \\(h\\) là:", options: ["\\(V = \\frac{1}{3}Bh\\)", "\\(V = Bh\\)", "\\(V = \\frac{1}{2}Bh\\)", "\\(V = 3Bh\\)"], ans: 1, exp: "Công thức cơ bản: Thể tích lăng trụ \\(V = Bh\\)." },
+    { q: "Cho khối chóp có diện tích đáy \\(B = 6\\) và chiều cao \\(h = 4\\). Thể tích của khối chóp đã cho bằng:", options: ["24", "12", "8", "16"], ans: 2, exp: "\\(V = \\frac{1}{3}Bh = \\frac{1}{3} \\cdot 6 \\cdot 4 = 8\\)." },
+    { q: "Thể tích của khối lập phương có cạnh bằng 3 là:", options: ["9", "27", "18", "81"], ans: 1, exp: "\\(V = a^3 = 3^3 = 27\\)." }
+];
+
+const tfQuestions = [
+    { q: "Xét hàm số \\(f(x) = \\log_2(x^2 - 2x + 1)\\).", items: ["Tập xác định của hàm số là \\(D = \\mathbb{R} \\setminus \\{1\\}\\).", "Hàm số đồng biến trên khoảng \\((1; +\\infty)\\).", "Phương trình \\(f(x) = 2\\) có hai nghiệm phân biệt có tổng bằng 2.", "Đạo hàm của hàm số tại \\(x = 2\\) là \\(f'(2) = \\frac{2}{\\ln 2}\\)."], ans: [true, true, true, true], exp: "a) ĐK: \\(x^2-2x+1 > 0 \\Leftrightarrow (x-1)^2 > 0 \\Leftrightarrow x \\neq 1\\) (Đúng).<br>b) Khi \\(x > 1\\), \\((x-1)^2\\) đồng biến, cơ số 2 > 1 nên hàm số đồng biến (Đúng).<br>c) \\(\\log_2(x-1)^2 = 2 \\Leftrightarrow (x-1)^2 = 4 \\Leftrightarrow x = 3\\) hoặc \\(x = -1\\). Tổng = 2 (Đúng).<br>d) \\(f'(x) = \\frac{2x-2}{(x^2-2x+1)\\ln 2} = \\frac{2}{(x-1)\\ln 2} \\Rightarrow f'(2) = \\frac{2}{\\ln 2}\\) (Đúng)." },
+    { q: "Cho phương trình \\(4^x - 3 \\cdot 2^x + 2 = 0\\).", items: ["Đặt \\(t = 2^x\\) (\\(t > 0\\)), phương trình trở thành \\(t^2 - 3t + 2 = 0\\).", "Phương trình đã cho có hai nghiệm trái dấu.", "Tổng các nghiệm của phương trình bằng 0.", "Phương trình có một nghiệm nguyên lớn hơn 1."], ans: [true, false, false, false], exp: "a) Đúng, do \\(4^x = (2^x)^2 = t^2\\).<br>b) Giải ra \\(t = 1\\) hoặc \\(t = 2 \\Rightarrow 2^x = 1 \\Rightarrow x = 0\\) và \\(2^x = 2 \\Rightarrow x = 1\\). Hai nghiệm 0 và 1 không gọi là trái dấu (Sai).<br>c) Tổng các nghiệm = \\(0 + 1 = 1 \\neq 0\\) (Sai).<br>d) Nghiệm lớn nhất là 1, không có nghiệm > 1 (Sai)." },
+    { q: "Cho hình chóp \\(S.ABCD\\) có đáy \\(ABCD\\) là hình vuông cạnh \\(a\\), cạnh bên \\(SA\\) vuông góc với mặt phẳng đáy và \\(SA = a\\sqrt{2}\\).", items: ["Đường thẳng \\(CD\\) vuông góc với mặt phẳng \\((SAD)\\).", "Hình chiếu vuông góc của đoạn thẳng \\(SC\\) lên mặt phẳng \\((ABCD)\\) là đoạn thẳng \\(AC\\).", "Góc giữa đường thẳng \\(SC\\) và mặt phẳng \\((ABCD)\\) bằng \\(60^\\circ\\).", "Hai mặt phẳng \\((SBD)\\) và \\((SAC)\\) vuông góc với nhau."], ans: [true, true, false, true], exp: "a) \\(CD \\perp AD, CD \\perp SA \\Rightarrow CD \\perp (SAD)\\) (Đúng).<br>b) \\(SA \\perp (ABCD)\\) nên \\(AC\\) là hình chiếu của \\(SC\\) (Đúng).<br>c) Góc là \\(\\widehat{SCA}\\). Ta có \\(AC = a\\sqrt{2}\\). \\(\\tan(\\widehat{SCA}) = \\frac{SA}{AC} = \\frac{a\\sqrt{2}}{a\\sqrt{2}} = 1 \\Rightarrow 45^\\circ\\) (Sai).<br>d) \\(BD \\perp AC, BD \\perp SA \\Rightarrow BD \\perp (SAC) \\Rightarrow (SBD) \\perp (SAC)\\) (Đúng)." },
+    { q: "Cho hình lăng trụ đứng \\(ABC.A'B'C'\\) có đáy \\(ABC\\) là tam giác vuông cân tại \\(A\\), cạnh \\(AB = a\\). Góc giữa đường thẳng \\(A'B\\) và mặt phẳng \\((ABC)\\) bằng \\(60^\\circ\\).", items: ["Chiều cao của khối lăng trụ bằng \\(a\\sqrt{3}\\).", "Thể tích khối lăng trụ \\(ABC.A'B'C'\\) bằng \\(\\frac{a^3\\sqrt{3}}{6}\\).", "Khoảng cách giữa hai đường thẳng \\(AA'\\) và \\(BC\\) bằng \\(\\frac{a\\sqrt{2}}{2}\\).", "Khoảng cách từ điểm \\(C'\\) đến mặt phẳng \\((ABB'A')\\) bằng \\(a\\sqrt{2}\\)."], ans: [true, false, true, false], exp: "a) Góc là \\(\\widehat{A'BA} = 60^\\circ \\Rightarrow AA' = AB\\tan(60^\\circ) = a\\sqrt{3}\\) (Đúng).<br>b) \\(V = S_{ABC} \\cdot AA' = \\frac{1}{2}a^2 \\cdot a\\sqrt{3} = \\frac{a^3\\sqrt{3}}{2}\\) (Sai).<br>c) \\(AA' \\parallel (BCC'B') \\Rightarrow d(AA', BC) = d(A, BC) = AH\\) (đường cao tam giác \\(ABC\\)). \\(AH = \\frac{BC}{2} = \\frac{a\\sqrt{2}}{2}\\) (Đúng).<br>d) Kẻ \\(C'A' \\perp A'B'\\), do lăng trụ đứng \\(C'A' \\perp AA' \\Rightarrow C'A' \\perp (ABB'A')\\). \\(d(C', (ABB'A')) = C'A' = a\\) (Sai)." }
+];
+
+const shortAnswers = [
+    { q: "Tính giá trị của biểu thức \\(P = \\log_3(27) + 2^{\\log_2(5)}\\).", ans: "8", exp: "\\(P = \\log_3(3^3) + 5 = 3 + 5 = 8\\)." },
+    { q: "Tìm số nghiệm nguyên của bất phương trình \\(\\left(\\frac{1}{3}\\right)^{x^2 - x} \\ge \\frac{1}{9}\\).", ans: "4", exp: "\\((\\frac{1}{3})^{x^2-x} \\ge (\\frac{1}{3})^2 \\Leftrightarrow x^2 - x \\le 2 \\Leftrightarrow x^2 - x - 2 \\le 0 \\Leftrightarrow -1 \\le x \\le 2\\). Các nghiệm nguyên là: -1, 0, 1, 2 (Có 4 nghiệm)." },
+    { q: "Cho khối chóp \\(S.ABC\\) có đáy \\(ABC\\) là tam giác vuông tại \\(B\\), \\(AB = 3, BC = 4\\). Cạnh bên \\(SA\\) vuông góc với mặt phẳng đáy và \\(SA = 5\\). Tính thể tích của khối chóp \\(S.ABC\\).", ans: "10", exp: "Diện tích đáy \\(S = \\frac{1}{2} \\cdot 3 \\cdot 4 = 6\\). Thể tích \\(V = \\frac{1}{3} S \\cdot SA = \\frac{1}{3} \\cdot 6 \\cdot 5 = 10\\)." },
+    { q: "Cho hình chóp tứ giác đều \\(S.ABCD\\) có tất cả các cạnh đều bằng 2. Tính khoảng cách từ tâm \\(O\\) của mặt đáy đến mặt phẳng \\((SCD)\\) (làm tròn đến 2 chữ số thập phân).", ans: "0.82", exp: "Gọi M là trung điểm CD, kẻ \\(OM \\perp CD\\), kẻ \\(OH \\perp SM\\). Khoảng cách cần tìm là OH.<br>\\(OM = 1\\); \\(OD = \\sqrt{2} \\Rightarrow SO = \\sqrt{SD^2 - OD^2} = \\sqrt{2^2 - 2} = \\sqrt{2}\\).<br>\\(\\frac{1}{OH^2} = \\frac{1}{OM^2} + \\frac{1}{SO^2} = \\frac{1}{1} + \\frac{1}{2} = \\frac{3}{2} \\Rightarrow OH = \\sqrt{\\frac{2}{3}} \\approx 0.82\\)." }
+];
+
+function initQuiz() {
+    const p1 = document.getElementById('part1');
+    mcqs.forEach((item, i) => {
+        const div = document.createElement('div');
+        div.className = 'question';
+        div.id = `q_mcq_${i}`;
+        let optionsHtml = item.options.map((opt, oi) => `
+            <label class="option" id="lbl_mcq_${i}_${oi}">
+                <input type="radio" name="mcq${i}" value="${oi}">
+                ${String.fromCharCode(65+oi)}. ${opt}
+            </label>
+        `).join('');
+        div.innerHTML = `<div class="question-text">Câu ${i+1}: ${item.q}</div>
+            <div class="options">${optionsHtml}</div>
+            <div class="explanation" id="exp_mcq_${i}">
+                <div class="explanation-title">💡 Lời giải:</div>
+                <div>${item.exp}</div>
+            </div>`;
+        p1.appendChild(div);
+    });
+
+    const p2 = document.getElementById('part2');
+    tfQuestions.forEach((item, i) => {
+        const div = document.createElement('div');
+        div.className = 'question';
+        div.id = `q_tf_${i}`;
+        let subHtml = item.items.map((sub, si) => `
+            <div class="tf-row">
+                <span>${String.fromCharCode(97+si)}) ${sub}</span>
+                <div>
+                    <label id="lbl_tf_${i}_${si}_true"><input type="radio" name="tf${i}_${si}" value="true"> Đúng</label>
+                    <label id="lbl_tf_${i}_${si}_false" style="margin-left:10px;"><input type="radio" name="tf${i}_${si}" value="false"> Sai</label>
+                </div>
+            </div>
+        `).join('');
+        div.innerHTML = `<div class="question-text">Câu ${i+1}: ${item.q}</div>${subHtml}
+            <div class="explanation" id="exp_tf_${i}">
+                <div class="explanation-title">💡 Lời giải:</div>
+                <div>${item.exp}</div>
+            </div>`;
+        p2.appendChild(div);
+    });
+
+    const p3 = document.getElementById('part3');
+    shortAnswers.forEach((item, i) => {
+        const div = document.createElement('div');
+        div.className = 'question';
+        div.id = `q_sa_${i}`;
+        div.innerHTML = `<div class="question-text">Câu ${i+1}: ${item.q}</div>
+            <div class="short-answer">
+                <input type="text" id="sa${i}" placeholder="Nhập đáp án số...">
+            </div>
+            <div class="explanation" id="exp_sa_${i}">
+                <div class="explanation-title">💡 Lời giải (Đáp án đúng: ${item.ans}):</div>
+                <div>${item.exp}</div>
+            </div>`;
+        p3.appendChild(div);
+    });
+    
+    if (window.MathJax) {
+        MathJax.typesetPromise();
+    }
+}
+
+function checkAnswers() {
+    let score = 0;
+    let scoreTf = 0;
+    const total = mcqs.length + tfQuestions.length * 4 + shortAnswers.length;
+
+    // Vô hiệu hóa nút để tránh nộp nhiều lần
+    document.getElementById('submit-btn').disabled = true;
+    document.getElementById('submit-btn').style.background = '#95a5a6';
+
+    // Chấm Part 1
+    mcqs.forEach((item, i) => {
+        const selected = document.querySelector(`input[name="mcq${i}"]:checked`);
+        document.getElementById(`exp_mcq_${i}`).style.display = 'block';
+        
+        // Highlight correct answer
+        document.getElementById(`lbl_mcq_${i}_${item.ans}`).classList.add('correct-bg');
+        
+        if (selected) {
+            const val = parseInt(selected.value);
+            if (val === item.ans) {
+                score++;
+            } else {
+                document.getElementById(`lbl_mcq_${i}_${val}`).classList.add('wrong-bg');
+            }
+        }
+        
+        // Vô hiệu hóa inputs
+        document.querySelectorAll(`input[name="mcq${i}"]`).forEach(inp => inp.disabled = true);
+    });
+
+    // Chấm Part 2
+    tfQuestions.forEach((item, i) => {
+        document.getElementById(`exp_tf_${i}`).style.display = 'block';
+        item.items.forEach((sub, si) => {
+            const selected = document.querySelector(`input[name="tf${i}_${si}"]:checked`);
+            
+            // Highlight đáp án đúng
+            const correctValStr = item.ans[si] ? 'true' : 'false';
+            document.getElementById(`lbl_tf_${i}_${si}_${correctValStr}`).style.color = '#27ae60';
+            document.getElementById(`lbl_tf_${i}_${si}_${correctValStr}`).style.fontWeight = 'bold';
+            
+            if (selected) {
+                if ((selected.value === 'true') === item.ans[si]) {
+                    score++;
+                } else {
+                    const wrongValStr = (selected.value === 'true') ? 'true' : 'false';
+                    document.getElementById(`lbl_tf_${i}_${si}_${wrongValStr}`).style.color = '#dc3545';
+                }
+            }
+            // Vô hiệu hóa inputs
+            document.querySelectorAll(`input[name="tf${i}_${si}"]`).forEach(inp => inp.disabled = true);
+        });
+    });
+
+    // Chấm Part 3
+    shortAnswers.forEach((item, i) => {
+        const inputEl = document.getElementById(`sa${i}`);
+        const val = inputEl.value.trim().replace(',', '.');
+        document.getElementById(`exp_sa_${i}`).style.display = 'block';
+        
+        inputEl.disabled = true;
+        if (val === item.ans) {
+            score++;
+            inputEl.style.backgroundColor = '#d4edda';
+            inputEl.style.borderColor = '#c3e6cb';
+        } else {
+            inputEl.style.backgroundColor = '#f8d7da';
+            inputEl.style.borderColor = '#f5c6cb';
+        }
+    });
+
+    const resDiv = document.getElementById('result');
+    resDiv.style.display = 'block';
+    
+    // Đánh giá dựa trên tổng điểm
+    let message = "";
+    const percentage = score / total;
+    if (percentage === 1) message = "Quá xuất sắc! Cứ giữ phong độ này nhé.";
+    else if (percentage >= 0.8) message = "Rất tốt! Chỉ cần chú ý thêm vài lỗi nhỏ là hoàn hảo.";
+    else if (percentage >= 0.6) message = "Khá ổn, nhưng hãy cẩn thận đọc lại kỹ mấy bước tính toán nhé.";
+    else message = "Cần ôn tập lý thuyết và luyện nháp cẩn thận hơn nữa!";
+
+    resDiv.className = percentage >= 0.8 ? 'correct-bg' : (percentage < 0.5 ? 'wrong-bg' : '');
+    resDiv.innerHTML = `Kết quả: ${score}/${total} điểm (${((score/total)*10).toFixed(2)}/10)<br><span style="font-size: 1.1rem; font-weight: normal; color: #555;">${message}</span>`;
+    
+    // Kích hoạt MathJax hiển thị lại cho các phần lời giải
+    if (window.MathJax) {
+        MathJax.typesetPromise();
+    }
+    
+    // Cuộn xuống kết quả
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+window.onload = initQuiz;
+</script>
+
+</body>
+</html>
